@@ -89,7 +89,7 @@ with open('data/2019_matchups_fixed.csv') as sched_file:
                 if row[i] != '' and row[i] != 'All Star Game':
                     games[row[i]] = team_col_rev[i]
             schedule[row[0]] = games
-
+    #print(schedule)
 #eventually contain all code into a function
 # def extractDay(curr_day_filepath, batting_filepath, pitching_filepath, defense_filepath)
 
@@ -163,7 +163,7 @@ with open('data/past_week_pitching.csv') as pitch_file:
             team = team_abbs[row[0]]
             if team in teams_data:
                 #find current team's daily opponent
-                oppo = schedule[' 08/1/19'][team] #TODO pass in flexible date, add in error case if not found
+                oppo = schedule['8/1/2019'][team] #TODO pass in flexible date, add in error case if not found
                 
                 teams_data[team]['WHIP'] = non_reversed_pitch[oppo]['WHIP']
                 teams_data[team]['BABIP_PITCH'] = non_reversed_pitch[oppo]['BABIP_PITCH']
@@ -205,7 +205,7 @@ with open('data/past_week_defense.csv') as def_file:
             team = team_abbs[row[0]]
             if team in teams_data:
                 #find current team's daily opponent
-                oppo = schedule['08/1/19'][team] #TODO pass in flexible date, add in error case if not found
+                oppo = schedule['8/1/2019'][team] #TODO pass in flexible date, add in error case if not found
                 
                 teams_data[team]['DEF'] = non_reversed_def[oppo]['DEF']
             
@@ -245,6 +245,7 @@ with open('dataset.csv', mode='w', newline='') as data_file:
                                 teams_data[team]['SIERA'],
                                 teams_data[team]['DEF'] #TODO still need to get this somehow
                                 ])
+    data_writer.writerow([''])
 
 #current day
 #https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0%2Cts&rost=0&age=0&filter=&players=0&startdate=2019-08-01&enddate=2019-08-01
