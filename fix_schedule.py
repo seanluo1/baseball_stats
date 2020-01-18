@@ -74,7 +74,7 @@ for row in csv.reader(csv_in):
         line_count += 1
         writer.writerow(row)
         continue
-    date = row[0][3:]
+    date = row[0][4:]
     row[0] = date
     #print(row)
     for i in range(len(row)):

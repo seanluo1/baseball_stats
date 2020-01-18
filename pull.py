@@ -91,7 +91,7 @@ with open('data/2019_matchups_fixed.csv') as sched_file:
             schedule[row[0]] = games
 
 #eventually contain all code into a function
-# def extractDay(curr_day, week_start, week_end, )
+# def extractDay(curr_day_filepath, batting_filepath, pitching_filepath, defense_filepath)
 
 #read current day runs
 with open('data/curr_day.csv') as cd_file:
@@ -205,7 +205,7 @@ with open('data/past_week_defense.csv') as def_file:
             team = team_abbs[row[0]]
             if team in teams_data:
                 #find current team's daily opponent
-                oppo = schedule[' 08/1/19'][team] #TODO pass in flexible date, add in error case if not found
+                oppo = schedule['08/1/19'][team] #TODO pass in flexible date, add in error case if not found
                 
                 teams_data[team]['DEF'] = non_reversed_def[oppo]['DEF']
             
@@ -246,11 +246,14 @@ with open('dataset.csv', mode='w', newline='') as data_file:
                                 teams_data[team]['DEF'] #TODO still need to get this somehow
                                 ])
 
-#pitching
-#https://www.fangraphs.com/leaders.aspx?pos=all&stats=rel&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31
-
-#batting
+#current day
 #https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0%2Cts&rost=0&age=0&filter=&players=0&startdate=2019-08-01&enddate=2019-08-01
 
-#defense
+#pitching 7 days
+#https://www.fangraphs.com/leaders.aspx?pos=all&stats=rel&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31
+
+#batting 7 days
+#https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31
+
+#defense 7 days
 #https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31
