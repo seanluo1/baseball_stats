@@ -10,11 +10,17 @@ CURRENT_DAY_URL = 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=a
 PITCHING_PAST_URL = 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=rel&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate='
 BATTING_PAST_URL = 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate='
 FIELDING_PAST_URL = 'https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate='
-sdate = date(2019, 3, 27)   # start date (+7 bc first week doesn't have data we want)
+sdate = date(2019, 3, 27)   # start date 3/27/2019 (+7 bc first week doesn't have data we want)
 edate = date(2019, 9, 29)   # end date
-
 delta = edate - sdate       # as timedelta
 
+
+#init browser driver with pop-ups disabled
+chrome_opts = Options()
+chrome_opts.add_argument("--block-new-web-contents")
+driver = webdriver.Chrome(options=chrome_opts)
+#print(CURRENT_DAY_URL+curr_day+'&enddate='+curr_day)
+    
 #get all dates in season
 for i in range(delta.days + 1):
     curr_day = sdate + timedelta(days=i)
@@ -28,15 +34,18 @@ for i in range(delta.days + 1):
     #print(len(curr_day)) --> 10
     #print("Current day: " + curr_day + "\nWeek Start: "+ past_week_s + "\nWeek End: " + past_week_e + "\n")
 
-    #init browser driver with pop-ups disabled
-    chrome_opts = Options()
-    chrome_opts.add_argument("--disable-popup-blocking")
-    driver = webdriver.Chrome(chrome_options=chrome_opts)
-    #print(CURRENT_DAY_URL+curr_day+'&enddate='+curr_day)
 
     #current day
     driver.get(CURRENT_DAY_URL+curr_day+'&enddate='+curr_day)
     #driver.get('https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0%2Cts&rost=0&age=0&filter=&players=0&startdate=2019-08-01&enddate=2019-08-01')
+
+    # #popup handling
+    time.sleep(3)
+    if driver.find_element_by_class_name('my_popup_close').is_displayed():
+        popup_cancel = driver.find_element_by_class_name('my_popup_close')
+        if popup_cancel.click():
+            popup_cancel.click()
+        time.sleep(3)
     csv_download = driver.find_element_by_id('LeaderBoard1_cmdCSV')
     csv_download.click()
     while not os.path.exists(DOWNLOAD_PATH):
@@ -47,6 +56,13 @@ for i in range(delta.days + 1):
     #pitching
     driver.get(PITCHING_PAST_URL+past_week_s+'&enddate='+past_week_e)
     #driver.get('https://www.fangraphs.com/leaders.aspx?pos=all&stats=rel&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31')
+    #popup handling
+    time.sleep(3)
+    if driver.find_element_by_class_name('my_popup_close').is_displayed():
+        popup_cancel = driver.find_element_by_class_name('my_popup_close')
+        if popup_cancel.click():
+            popup_cancel.click()
+        time.sleep(3)
     csv_download = driver.find_element_by_id('LeaderBoard1_cmdCSV')
     csv_download.click()
     while not os.path.exists(DOWNLOAD_PATH):
@@ -57,6 +73,13 @@ for i in range(delta.days + 1):
     #batting
     driver.get(BATTING_PAST_URL+past_week_s+'&enddate='+past_week_e)
     #driver.get('https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=1&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31')
+    #popup handling
+    time.sleep(3)
+    if driver.find_element_by_class_name('my_popup_close').is_displayed():
+        popup_cancel = driver.find_element_by_class_name('my_popup_close')
+        if popup_cancel.click():
+            popup_cancel.click()
+        time.sleep(3)
     csv_download = driver.find_element_by_id('LeaderBoard1_cmdCSV')
     csv_download.click()
     while not os.path.exists(DOWNLOAD_PATH):
@@ -67,6 +90,13 @@ for i in range(delta.days + 1):
     #fielding
     driver.get(FIELDING_PAST_URL+past_week_s+'&enddate='+past_week_e)
     #driver.get('https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0,ts&rost=0&age=0&filter=&players=0&startdate=2019-07-25&enddate=2019-07-31')
+    #popup handling
+    time.sleep(3)
+    if driver.find_element_by_class_name('my_popup_close').is_displayed():
+        popup_cancel = driver.find_element_by_class_name('my_popup_close')
+        if popup_cancel.click():
+            popup_cancel.click()
+        time.sleep(3)
     csv_download = driver.find_element_by_id('LeaderBoard1_cmdCSV')
     csv_download.click()
     while not os.path.exists(DOWNLOAD_PATH):
@@ -74,7 +104,7 @@ for i in range(delta.days + 1):
     shutil.move(DOWNLOAD_PATH, './data/fielding/'+past_week_s+'_'+past_week_e+'.csv')
     print('Received fielding data from ' + past_week_s + ' to ' + past_week_e + '.')
 
-    driver.close()
+driver.close()
 
 #current day
 #https://www.fangraphs.com/leaders.aspx?pos=all&stats=bat&lg=all&qual=0&type=8&season=2019&month=1000&season1=2019&ind=0&team=0%2Cts&rost=0&age=0&filter=&players=0&startdate=2019-08-01&enddate=2019-08-01

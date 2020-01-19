@@ -75,6 +75,9 @@ for row in csv.reader(csv_in):
         writer.writerow(row)
         continue
     date = row[0][4:]
+    if len(date) == 7:
+        temp = date[0:3]+'0'+date[3:]
+        date = temp
     row[0] = date
     #print(row)
     for i in range(len(row)):
